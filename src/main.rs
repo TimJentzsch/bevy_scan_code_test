@@ -1,14 +1,19 @@
-use bevy::prelude::*;
+use bevy::{
+    input::{keyboard::KeyboardInput, ButtonState},
+    prelude::*,
+};
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
-        .add_system(print_scan_code)
+        .add_system(log_keyboard_input)
         .run();
 }
 
-fn print_scan_code(scan_code_input: Res<Input<ScanCode>>) {
-    for scan_code in scan_code_input.get_just_pressed() {
-        println!("Pressed scan code 0x{:x}", scan_code.0);
+fn log_keyboard_input(mut key_evr: EventReader<KeyboardInput>) {
+    for ev in key_evr.iter() {
+        if ev.state == ButtonState::Pressed {
+            info!("Key press: {:?} ({})", ev.key_code, ev.scan_code);
+        }
     }
 }
