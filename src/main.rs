@@ -13,7 +13,14 @@ fn main() {
 fn log_keyboard_input(mut key_evr: EventReader<KeyboardInput>) {
     for ev in key_evr.iter() {
         if ev.state == ButtonState::Pressed {
-            info!("Key press: {:?} (0x{:x})", ev.key_code, ev.scan_code);
+            let key_code = ev
+                .key_code
+                .map_or_else(|| "None".to_string(), |key_code| format!("{key_code:?}"));
+
+            info!(
+                "Key press: {key_code} (0x{:x} / {})",
+                ev.scan_code, ev.scan_code
+            );
         }
     }
 }
